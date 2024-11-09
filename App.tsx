@@ -5,114 +5,70 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, SafeAreaView, Text } from 'react-native';
+import KioskScreen from './src/Components/KioskScreen';
+import LoginScreen from './src/Components/LoginScreen';
+import { GetSettings, RemoveSettings, SaveSettings } from './src/Functions/storage';
+import SettingsScreen from './src/Components/SettingsScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(false);
+  const [venue, setVenue] = useState(false);
+  const [bay, setBay] = useState(false);
+
+  useEffect(() => {
+    GetSettings('userId')
+      .then(response => setUserId(JSON.parse(response)))
+      .catch(error => console.error(error));
+    GetSettings('venue')
+      .then(response => setVenue(JSON.parse(response)))
+      .catch(error => console.error(error));
+    GetSettings('bay')
+      .then(response => setBay(JSON.parse(response)))
+      .catch(error => console.error(error));
+  },[]);
+
+  const LogOut = () => {
+    RemoveSettings('user');
+    RemoveSettings('userId');
+    setLoggedIn(false);
+    setUserId(false);
+  };
+
+  const updateAppData = (key, value) => {
+    switch (key) {
+      case 'venue':
+        setVenue(value);
+      break;
+    }
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView>
+      { !userId && <LoginScreen
+              onLogIn={ (logValue, newUserId) => {
+                setLoggedIn(logValue);
+                setUserId(newUserId);
+              }}
+            />
+      }
+      {/* { userId && (!venue || !bay) &&
+        <SettingsScreen
+          updateData={ (key, value) => updateAppData(key, value)}
+        />
+      } */}
+      <KioskScreen/>
+      {userId && venue && bay && <KioskScreen/>}
+      {/* <Button
+        title="log out"
+        onPress={LogOut}
+      /> */}
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
