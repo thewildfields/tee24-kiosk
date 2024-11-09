@@ -1,15 +1,20 @@
-import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { PropsWithChildren } from 'react';
+import { StyleSheet, Text, TouchableHighlight } from 'react-native';
 
-const SupportButton = () => {
+type SupportButtonProps = PropsWithChildren<{
+    onTouch: Function;
+}>;
+
+const SupportButton = ({onTouch}: SupportButtonProps) => {
     return(
-        <View
+        <TouchableHighlight
             style={styles.supportButton}
+            onPress={ e => onTouch(true)}
         >
             <Text
                 style={styles.supportButtonText}
             >Support</Text>
-        </View>
+        </TouchableHighlight>
     );
 };
 

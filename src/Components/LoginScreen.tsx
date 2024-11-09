@@ -66,7 +66,6 @@ const LoginScreen = ({onLogIn}: LoginScreenProps): React.JSX.Element => {
 
 const styles = StyleSheet.create({
     loginScreen: {
-        display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',

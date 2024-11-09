@@ -56,13 +56,7 @@ function App(): React.JSX.Element {
               }}
             />
       }
-      {/* { userId && (!venue || !bay) &&
-        <SettingsScreen
-          updateData={ (key, value) => updateAppData(key, value)}
-        />
-      } */}
-      <KioskScreen/>
-      {userId && venue && bay && <KioskScreen/>}
+      { userId && <KioskScreen/> }
       {/* <Button
         title="log out"
         onPress={LogOut}
