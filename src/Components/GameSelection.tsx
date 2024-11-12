@@ -44,12 +44,14 @@ const GameSelection = (): React.JSX.Element => {
                         <Text style={styles.h1}>{ `Welcome to ${venue.title}`}</Text>
                         <Text style={styles.h2}>{ `You are on ${bay.title}`}</Text>
                     </View>
-                    { 
-                        kioskOpen
-                            ? <StartGame />
-                            : <CustomerLogin
-                                onSubmit={ value => setKioskOpen(value) }
-                            />
+                    { kioskOpen && <StartGame /> }
+                    {
+                        !kioskOpen &&
+                        <CustomerLogin
+                            venueId={venueId}
+                            bayId={bayId}
+                            onSubmit={ value => setKioskOpen(value) }
+                        />
                     }
                 </>
             }
