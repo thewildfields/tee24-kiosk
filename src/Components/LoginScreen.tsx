@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SaveSettings } from '../Functions/storage';
+import { NativeModules } from 'react-native';
+const { LauncherModule } = NativeModules;
 
 type LoginScreenProps = PropsWithChildren<{
     onLogIn: Function,
@@ -12,6 +14,13 @@ const LoginScreen = ({onLogIn}: LoginScreenProps): React.JSX.Element => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const launchTGC = async () => {
+        try {
+          await LauncherModule.launchUri('file:///C:/ProgramData/ProTee United/TGC Simulator/TGCSim.exe'); // Launches specific .exe
+        } catch (error) {
+          console.error('Error launching exe:', error);
+        }
+      };
 
     const SignIn = () => {
 
@@ -21,7 +30,7 @@ const LoginScreen = ({onLogIn}: LoginScreenProps): React.JSX.Element => {
             isKiosk: true,
         };
 
-        axios.post('http://127.0.0.1:5001/golf-bay-rental/us-central1/app/auth/sign-in', signInData)
+        axios.post('https://us-central1-golf-bay-rental.cloudfunctions.net/app/auth/sign-in', signInData)
             .then(
                 async response => {
                     if(response.data.message && response.data.message === 'Login successful'){
@@ -40,9 +49,7 @@ const LoginScreen = ({onLogIn}: LoginScreenProps): React.JSX.Element => {
     };
 
     return(
-        <View
-            style={styles.loginScreen}
-        >
+        <View style={styles.loginScreen} >
             <Text>Login Screen</Text>
             <TextInput
                 style={styles.textInput}
@@ -58,6 +65,10 @@ const LoginScreen = ({onLogIn}: LoginScreenProps): React.JSX.Element => {
             <Button
               title="log in"
               onPress={ SignIn }
+            />
+            <Button
+              title="Launch TGC"
+              onPress={ launchTGC}
             />
             <Text>{errorMessage}</Text>
         </View>

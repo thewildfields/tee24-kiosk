@@ -41,24 +41,24 @@ const SettingsWindow = ({isVisible, updateVisibility }: SupportWindowProps): Rea
     },[]);
 
     useEffect(() => {
-        axios.get(`http://127.0.0.1:5001/golf-bay-rental/us-central1/app/venues/${userId}`)
+        axios.get(`https://us-central1-golf-bay-rental.cloudfunctions.net/app/venues/${userId}`)
             .then( response => setVenues(response.data))
             .catch( error => console.error(error));
     },[userId]);
 
     useEffect(() => {
         if( !venueId || !venueId.length ){ return; }
-        axios.get(`http://127.0.0.1:5001/golf-bay-rental/us-central1/app/venue/id/${venueId}`)
+        axios.get(`https://us-central1-golf-bay-rental.cloudfunctions.net/app/venue/id/${venueId}`)
             .then( response => setVenue(response.data))
             .catch( error => console.error(error));
-        axios.get(`http://127.0.0.1:5001/golf-bay-rental/us-central1/app/bays/venue/${venueId}`)
+        axios.get(`https://us-central1-golf-bay-rental.cloudfunctions.net/app/bays/venue/${venueId}`)
             .then( response => setBays(response.data))
             .catch( error => console.error(error));
     },[venueId]);
 
     useEffect(() => {
         if( !bayId || !bayId.length ){ return; }
-        axios.get(`http://127.0.0.1:5001/golf-bay-rental/us-central1/app/bay/${bayId}`)
+        axios.get(`https://us-central1-golf-bay-rental.cloudfunctions.net/app/bay/${bayId}`)
             .then( response => setBay(response.data))
             .catch( error => console.error(error));
     },[bayId]);

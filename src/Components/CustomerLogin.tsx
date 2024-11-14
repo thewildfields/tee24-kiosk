@@ -20,7 +20,7 @@ const CustomerLogin = ({ onSubmit, venueId, bayId }: CustomerLoginProps ): React
         e.preventDefault();
         setErrorMessage(false);
         if(!phone || !phone.trim().length ){ return; }
-        axios.get(`http://127.0.0.1:5001/golf-bay-rental/us-central1/app/kiosk/venue/${venueId}/bay/${bayId}/phone/${phone}`)
+        axios.get(`https://us-central1-golf-bay-rental.cloudfunctions.net/app/kiosk/venue/${venueId}/bay/${bayId}/phone/${phone}`)
             .then( response => {
                 if( response.data.isSuccess){
                     setSuccessMessage(`Hello ${response.data.customerName}! We found Your booking!`)
