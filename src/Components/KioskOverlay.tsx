@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
-import { Modal, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Modal } from 'react-native-windows';
 import { Overlay } from 'react-native-elements';
 
 type SupportWindowProps = PropsWithChildren<{
